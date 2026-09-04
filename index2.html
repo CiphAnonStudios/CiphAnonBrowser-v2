@@ -6,42 +6,44 @@
   <title>CiphAnon Studios Browser</title>
   <style>
     :root{
-      --bg: #eef2f7;
-      --panel: rgba(255,255,255,0.78);
-      --panel-solid: #ffffff;
-      --panel-2: rgba(248,250,252,0.92);
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: rgba(148,163,184,0.22);
-      --shadow: 0 18px 60px rgba(15, 23, 42, 0.12);
-      --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
-      --accent: #6366f1;
-      --accent-2: #4f46e5;
-      --accent-soft: rgba(99,102,241,0.12);
-      --danger: #ef4444;
-      --radius-xl: 22px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
+      --bg: #fff7f2;
+      --panel: rgba(255,255,255,0.82);
+      --panel-strong: #ffffff;
+      --panel-soft: rgba(255,248,243,0.95);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: rgba(249,115,22,0.18);
+      --shadow: 0 18px 50px rgba(0,0,0,0.10);
+      --shadow-soft: 0 8px 24px rgba(0,0,0,0.08);
+      --accent: #ff7a18;
+      --accent-2: #ff8f3a;
+      --accent-dark: #e85f00;
+      --accent-soft: rgba(255,122,24,0.14);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
     }
 .theme-dark{
-  --bg: #0b1020;
-  --panel: rgba(15,23,42,0.72);
-  --panel-solid: #0f172a;
-  --panel-2: rgba(15,23,42,0.94);
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --border: rgba(148,163,184,0.16);
-  --shadow: 0 18px 60px rgba(0,0,0,0.35);
-  --shadow-soft: 0 8px 24px rgba(0,0,0,0.22);
-  --accent: #8b5cf6;
-  --accent-2: #7c3aed;
-  --accent-soft: rgba(139,92,246,0.16);
+  --bg: #1a120d;
+  --panel: rgba(34,20,14,0.78);
+  --panel-strong: #24150f;
+  --panel-soft: rgba(40,25,17,0.94);
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --border: rgba(255,166,77,0.16);
+  --shadow: 0 18px 50px rgba(0,0,0,0.28);
+  --shadow-soft: 0 8px 24px rgba(0,0,0,0.18);
+  --accent: #ff8a1f;
+  --accent-2: #ff9d3f;
+  --accent-dark: #ff6f00;
+  --accent-soft: rgba(255,138,31,0.16);
 }
 
 .theme-blue{
-  --accent: #0ea5e9;
-  --accent-2: #0284c7;
-  --accent-soft: rgba(14,165,233,0.14);
+  --accent: #3b82f6;
+  --accent-2: #60a5fa;
+  --accent-dark: #2563eb;
+  --accent-soft: rgba(59,130,246,0.14);
 }
 
 *{ box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,9 +51,9 @@ html,body{ height:100%; }
 body{
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 24%),
-    radial-gradient(circle at top right, rgba(14,165,233,0.16), transparent 28%),
-    linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+    radial-gradient(circle at top left, rgba(255,122,24,0.18), transparent 26%),
+    radial-gradient(circle at top right, rgba(255,160,72,0.12), transparent 30%),
+    linear-gradient(180deg, #fffaf6 0%, var(--bg) 100%);
   color: var(--text);
   padding: 14px;
   overflow: hidden;
@@ -79,7 +81,7 @@ body{
 #loadingBar{
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
   transition: width 160ms linear;
   border-radius: 999px;
 }
@@ -119,7 +121,7 @@ body{
   color: var(--text);
 }
 .tab-button.active{
-  background: var(--panel-solid);
+  background: var(--panel-strong);
   color: var(--text);
   border-color: var(--border);
   box-shadow: var(--shadow-soft);
@@ -148,7 +150,7 @@ body{
   border-radius: 6px;
 }
 .close-tab:hover{
-  color: var(--danger);
+  color: #ef4444;
   background: rgba(239,68,68,0.08);
 }
 
@@ -169,7 +171,7 @@ body{
 }
 .add-tab-button:hover{
   transform: translateY(-1px);
-  background: var(--panel-solid);
+  background: var(--panel-strong);
   box-shadow: var(--shadow-soft);
 }
 
@@ -194,20 +196,17 @@ body{
 }
 .nav-btn:hover,.secondary-btn:hover,#themeSelect:hover{
   transform: translateY(-1px);
-  background: var(--panel-solid);
+  background: var(--panel-strong);
   box-shadow: var(--shadow-soft);
 }
 
 .nav-btn{
   border: none;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
   color: white;
   font-weight: 700;
   padding: 0 18px;
   box-shadow: 0 10px 20px var(--accent-soft);
-}
-.nav-btn:hover{
-  background: linear-gradient(135deg, var(--accent-2), var(--accent));
 }
 
 #urlInput{
@@ -225,7 +224,7 @@ body{
 #urlInput:focus{
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--accent-soft);
-  background: var(--panel-solid);
+  background: var(--panel-strong);
 }
 
 #iframes-container{
@@ -239,7 +238,7 @@ body{
   display: none;
   position: absolute;
   inset: 0;
-  background: var(--panel-solid);
+  background: var(--panel-strong);
 }
 .iframe-tab-content.active{ display: block; }
 .iframe-tab-content iframe{
@@ -260,8 +259,8 @@ body{
   padding: 32px;
   text-align: center;
   background:
-    radial-gradient(circle at top, rgba(99,102,241,0.14), transparent 30%),
-    linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+    radial-gradient(circle at top, rgba(255,122,24,0.12), transparent 30%),
+    linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.18));
 }
 
 .homepage-content h1{
@@ -269,11 +268,10 @@ body{
   line-height: 1;
   letter-spacing: -0.04em;
   font-weight: 900;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 12px 30px rgba(99,102,241,0.12);
 }
 
 .homepage-content p{
@@ -303,7 +301,7 @@ body{
 .homepage-search-input:focus{
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow-soft);
-  background: var(--panel-solid);
+  background: var(--panel-strong);
 }
 
 .search-action{
@@ -316,9 +314,75 @@ body{
   padding: 0 16px;
   font-weight: 800;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
   color: white;
   box-shadow: 0 10px 20px var(--accent-soft);
+}
+
+.home-section{
+  width: min(900px, 94vw);
+  text-align: left;
+  margin-top: 6px;
+}
+
+.section-label{
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.url-list-panel{
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.url-card{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.74);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.url-card:hover{
+  transform: translateY(-2px);
+  background: var(--panel-strong);
+  box-shadow: var(--shadow);
+}
+.url-card .dot{
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  flex-shrink: 0;
+}
+.url-card .text-wrap{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.url-card .title{
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.url-card .url{
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .homepage-links{
@@ -344,7 +408,7 @@ body{
 }
 .home-link:hover{
   transform: translateY(-2px);
-  background: var(--panel-solid);
+  background: var(--panel-strong);
   box-shadow: var(--shadow);
 }
 .home-link img{
@@ -389,6 +453,7 @@ body{
   .homepage-content{ padding: 20px; }
   .homepage-search-input{ padding-right: 98px; height: 54px; }
   .search-action{ padding: 0 14px; }
+  .home-section{ width: 100%; }
 }
 
   </style>
@@ -411,7 +476,7 @@ body{
   <button id="goBtn" class="nav-btn" title="Go">Go</button>
 
   <select id="themeSelect" title="Theme">
-    <option value="orange">Purple</option>
+    <option value="orange">Orange</option>
     <option value="dark">Dark</option>
     <option value="blue">Blue</option>
   </select>
@@ -490,7 +555,7 @@ body{
       const fav = document.createElement('div');
       fav.className = 'tab-favicon';
       fav.style.backgroundImage = isHomepage
-        ? `url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22><rect width=%2220%22 height=%2220%22 rx=%224%22 fill=%22%236366f1%22/></svg>')`
+        ? `url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22><rect width=%2220%22 height=%2220%22 rx=%224%22 fill=%22%23ff7a18%22/></svg>')`
         : `url(${favFor(tabUrl)})`;
 
       const tit = document.createElement('div');
@@ -513,18 +578,51 @@ body{
       if (isHomepage) {
         wrapper.innerHTML = `
           <div class="homepage-content" role="main">
-            <h1>CAS Cloak</h1>
-            <p>A cleaner browser shell with tabs, themes, and quick access links.</p>
+            <h1>CiphAnon Browser</h1>
+            <p>Your browser, your style. Quick links, orange theme, and a simple place to jump anywhere.</p>
 
             <div class="search-container">
               <input class="homepage-search-input" placeholder="Search or type URL" aria-label="Homepage search">
               <button class="search-action" id="ai-btn-${id}">AI</button>
             </div>
 
+            <div class="home-section">
+              <div class="section-label">Quick URLs</div>
+              <div class="url-list-panel" id="urlList-${id}">
+                <div class="url-card" data-url="https://www.google.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">Google</div>
+                    <div class="url">https://www.google.com</div>
+                  </div>
+                </div>
+                <div class="url-card" data-url="https://www.youtube.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">YouTube</div>
+                    <div class="url">https://www.youtube.com</div>
+                  </div>
+                </div>
+                <div class="url-card" data-url="https://www.roblox.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">Roblox</div>
+                    <div class="url">https://www.roblox.com</div>
+                  </div>
+                </div>
+                <div class="url-card" data-url="https://www.tiktok.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">TikTok</div>
+                    <div class="url">https://www.tiktok.com</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="homepage-links">
               <div class="home-link" data-url="https://www.youtube.com"><img src="https://www.google.com/s2/favicons?domain=youtube.com" alt="">YouTube</div>
               <div class="home-link" data-url="https://www.roblox.com"><img src="https://www.google.com/s2/favicons?domain=roblox.com" alt="">Roblox</div>
-              <div class="home-link" data-url="https://www.tiktok.com"><img src="https://www.google.com/s2/favicons?domain=tiktok.com" alt="">TikTok</div>
               <div class="home-link" data-url="https://www.google.com"><img src="https://www.google.com/s2/favicons?domain=google.com" alt="">Google</div>
             </div>
           </div>
@@ -566,7 +664,7 @@ body{
           }
         });
 
-        wrapper.querySelectorAll('.home-link').forEach(el =>
+        wrapper.querySelectorAll('.home-link, .url-card').forEach(el =>
           el.addEventListener('click', () => loadUrlInTab(id, el.dataset.url))
         );
 
@@ -650,19 +748,46 @@ body{
       if (tab.isHomepage) {
         wrapper.innerHTML = `
           <div class="homepage-content" role="main">
-            <h1>CAS Cloak</h1>
-            <p>A cleaner browser shell with tabs, themes, and quick access links.</p>
+            <h1>CiphAnon Browser</h1>
+            <p>Your browser, your style. Quick links, orange theme, and a simple place to jump anywhere.</p>
 
             <div class="search-container">
               <input class="homepage-search-input" placeholder="Search or type URL" aria-label="Homepage search">
               <button class="search-action">AI</button>
             </div>
 
-            <div class="homepage-links">
-              <div class="home-link" data-url="https://blockersgotbugsfr.github.io/GreenFieldInfinite/"><img src="https://www.google.com/s2/favicons?domain=blockersgotbugsfr.github.io" alt="">Green Field Infinite</div>
-              <div class="home-link" data-url="https://www.roblox.com"><img src="https://www.google.com/s2/favicons?domain=roblox.com" alt="">Roblox</div>
-              <div class="home-link" data-url="https://www.tiktok.com"><img src="https://www.google.com/s2/favicons?domain=tiktok.com" alt="">TikTok</div>
-              <div class="home-link" data-url="https://www.google.com"><img src="https://www.google.com/s2/favicons?domain=google.com" alt="">Google</div>
+            <div class="home-section">
+              <div class="section-label">Quick URLs</div>
+              <div class="url-list-panel">
+                <div class="url-card" data-url="https://www.google.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">Google</div>
+                    <div class="url">https://www.google.com</div>
+                  </div>
+                </div>
+                <div class="url-card" data-url="https://www.youtube.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">YouTube</div>
+                    <div class="url">https://www.youtube.com</div>
+                  </div>
+                </div>
+                <div class="url-card" data-url="https://www.roblox.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">Roblox</div>
+                    <div class="url">https://www.roblox.com</div>
+                  </div>
+                </div>
+                <div class="url-card" data-url="https://www.tiktok.com">
+                  <div class="dot"></div>
+                  <div class="text-wrap">
+                    <div class="title">TikTok</div>
+                    <div class="url">https://www.tiktok.com</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         `;
@@ -674,7 +799,8 @@ body{
             if (val) loadUrlInTab(id, val);
           }
         });
-        wrapper.querySelectorAll('.home-link').forEach(el =>
+
+        wrapper.querySelectorAll('.url-card, .home-link').forEach(el =>
           el.addEventListener('click', () => loadUrlInTab(id, el.dataset.url))
         );
       } else {
