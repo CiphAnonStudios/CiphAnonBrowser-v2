@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CiphAnon Studios Browser</title>
+  <style>
+    :root{
+      --bg: #eef2f7;
+      --panel: rgba(255,255,255,0.78);
+      --panel-solid: #ffffff;
+      --panel-2: rgba(248,250,252,0.92);
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(148,163,184,0.22);
+      --shadow: 0 18px 60px rgba(15, 23, 42, 0.12);
+      --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --accent: #6366f1;
+      --accent-2: #4f46e5;
+      --accent-soft: rgba(99,102,241,0.12);
+      --danger: #ef4444;
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+.theme-dark{
+  --bg: #0b1020;
+  --panel: rgba(15,23,42,0.72);
+  --panel-solid: #0f172a;
+  --panel-2: rgba(15,23,42,0.94);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: rgba(148,163,184,0.16);
+  --shadow: 0 18px 60px rgba(0,0,0,0.35);
+  --shadow-soft: 0 8px 24px rgba(0,0,0,0.22);
+  --accent: #8b5cf6;
+  --accent-2: #7c3aed;
+  --accent-soft: rgba(139,92,246,0.16);
+}
+
+.theme-blue{
+  --accent: #0ea5e9;
+  --accent-2: #0284c7;
+  --accent-soft: rgba(14,165,233,0.14);
+}
+
+*{ box-sizing: border-box; margin: 0; padding: 0; }
+html,body{ height:100%; }
+body{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 24%),
+    radial-gradient(circle at top right, rgba(14,165,233,0.16), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+  color: var(--text);
+  padding: 14px;
+  overflow: hidden;
+}
+
+.browser-container{
+  height: calc(100vh - 28px);
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  min-height: 0;
+}
+
+.loading-wrap{
+  height: 3px;
+  background: transparent;
+  overflow: hidden;
+}
+#loadingBar{
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 160ms linear;
+  border-radius: 999px;
+}
+
+#tabs-container{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.28);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#tabs-container::-webkit-scrollbar{ display:none; }
+
+.tab-button{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  max-width: 240px;
+  flex: 0 0 auto;
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease, color .15s ease, border-color .15s ease;
+}
+.tab-button:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.38);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+}
+.tab-button.active{
+  background: var(--panel-solid);
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: var(--shadow-soft);
+}
+.tab-favicon{
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+}
+.tab-title{
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.close-tab{
+  margin-left: 2px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  border-radius: 6px;
+}
+.close-tab:hover{
+  color: var(--danger);
+  background: rgba(239,68,68,0.08);
+}
+
+.add-tab-button{
+  height: 40px;
+  width: 40px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.34);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.add-tab-button:hover{
+  transform: translateY(-1px);
+  background: var(--panel-solid);
+  box-shadow: var(--shadow-soft);
+}
+
+.address-bar-area{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(255,255,255,0.22);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-btn,.secondary-btn,#themeSelect{
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.55);
+  color: var(--text);
+  padding: 0 14px;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.nav-btn:hover,.secondary-btn:hover,#themeSelect:hover{
+  transform: translateY(-1px);
+  background: var(--panel-solid);
+  box-shadow: var(--shadow-soft);
+}
+
+.nav-btn{
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  font-weight: 700;
+  padding: 0 18px;
+  box-shadow: 0 10px 20px var(--accent-soft);
+}
+.nav-btn:hover{
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+}
+
+#urlInput{
+  flex: 1;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.72);
+  color: var(--text);
+  padding: 0 16px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+#urlInput:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+  background: var(--panel-solid);
+}
+
+#iframes-container{
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: rgba(255,255,255,0.16);
+}
+
+.iframe-tab-content{
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--panel-solid);
+}
+.iframe-tab-content.active{ display: block; }
+.iframe-tab-content iframe{
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: white;
+}
+
+.homepage-content{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 32px;
+  text-align: center;
+  background:
+    radial-gradient(circle at top, rgba(99,102,241,0.14), transparent 30%),
+    linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+}
+
+.homepage-content h1{
+  font-size: clamp(42px, 6vw, 68px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 12px 30px rgba(99,102,241,0.12);
+}
+
+.homepage-content p{
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 560px;
+}
+
+.search-container{
+  width: min(760px, 92vw);
+  position: relative;
+}
+
+.homepage-search-input{
+  width: 100%;
+  height: 60px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.78);
+  color: var(--text);
+  padding: 0 152px 0 20px;
+  font-size: 16px;
+  outline: none;
+  box-shadow: var(--shadow-soft);
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.homepage-search-input:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow-soft);
+  background: var(--panel-solid);
+}
+
+.search-action{
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 44px;
+  border: none;
+  border-radius: 14px;
+  padding: 0 16px;
+  font-weight: 800;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 10px 20px var(--accent-soft);
+}
+
+.homepage-links{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+.home-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.7);
+  cursor: pointer;
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.home-link:hover{
+  transform: translateY(-2px);
+  background: var(--panel-solid);
+  box-shadow: var(--shadow);
+}
+.home-link img{
+  width: 18px;
+  height: 18px;
+}
+
+#fullscreen-controls-bar{
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  z-index: 2147483647;
+  background: rgba(2,6,23,0.88);
+  backdrop-filter: blur(14px);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.fullscreen-tab-button{
+  height: 36px;
+  margin-right: 6px;
+  padding: 0 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  cursor: pointer;
+}
+.fullscreen-tab-button.active{
+  background: var(--accent);
+  border-color: transparent;
+}
+
+@media (max-width: 700px){
+  body{ padding: 8px; }
+  .browser-container{ height: calc(100vh - 16px); border-radius: 20px; }
+  .address-bar-area{ flex-wrap: wrap; }
+  #urlInput{ order: 10; width: 100%; flex-basis: 100%; }
+  .tab-title{ display:none; }
+  .homepage-content{ padding: 20px; }
+  .homepage-search-input{ padding-right: 98px; height: 54px; }
+  .search-action{ padding: 0 14px; }
+}
+
+  </style>
+</head>
+<body>
+  <div id="fullscreen-controls-bar" aria-hidden="true"></div>
+  <div id="shell" class="browser-container">
+    <div class="loading-wrap"><div id="loadingBar"></div></div>
+<div id="tabs-container" role="tablist" aria-label="Tabs">
+  <button class="add-tab-button" id="addTabBtn" title="Open new tab">+</button>
+</div>
+
+<div class="address-bar-area">
+  <button id="backBtn" class="secondary-btn" title="Back">←</button>
+  <button id="forwardBtn" class="secondary-btn" title="Forward">→</button>
+  <button id="reloadBtn" class="secondary-btn" title="Reload">⟳</button>
+  <button id="homeBtn" class="secondary-btn" title="Home">Home</button>
+
+  <input type="text" id="urlInput" placeholder="Search or enter a URL" />
+  <button id="goBtn" class="nav-btn" title="Go">Go</button>
+
+  <select id="themeSelect" title="Theme">
+    <option value="orange">Purple</option>
+    <option value="dark">Dark</option>
+    <option value="blue">Blue</option>
+  </select>
+</div>
+
+<div id="iframes-container" aria-live="polite"></div>
+
+  </div>
+  <script>
+  (function(){
+    const tabsContainer = document.getElementById('tabs-container');
+    const iframesContainer = document.getElementById('iframes-container');
+    const addTabBtn = document.getElementById('addTabBtn');
+    const urlInput = document.getElementById('urlInput');
+    const goBtn = document.getElementById('goBtn');
+    const backBtn = document.getElementById('backBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const homeBtn = document.getElementById('homeBtn');
+    const loadingBar = document.getElementById('loadingBar');
+    const themeSelect = document.getElementById('themeSelect');
+    const fullscreenControlsBar = document.getElementById('fullscreen-controls-bar');
+    const shell = document.getElementById('shell');
+
+    const STORAGE_KEY = 'orange_browser_v2';
+    let tabs = [];
+    let counter = 0;
+    let loadingInterval = null;
+
+    function formatUrl(raw){
+      if (!raw) return '';
+      raw = raw.trim();
+      if (raw.includes(' ') || !raw.includes('.')) {
+        return 'https://www.google.com/search?q=' + encodeURIComponent(raw);
+      }
+      if (!/^https?:\/\//i.test(raw)) return 'https://' + raw;
+      return raw;
+    }
+
+    function getHostName(url){
+      try { return new URL(url).hostname.replace(/^www\./,''); } catch(e){ return url; }
+    }
+
+    function favFor(url){
+      try { return 'https://www.google.com/s2/favicons?domain=' + new URL(url).hostname; }
+      catch(e){ return ''; }
+    }
+
+    function startLoading(){
+      clearInterval(loadingInterval);
+      loadingBar.style.width = '6%';
+      loadingInterval = setInterval(() => {
+        const cur = parseFloat(loadingBar.style.width) || 6;
+        loadingBar.style.width = Math.min(92, cur + (Math.random() * 8 + 3)) + '%';
+      }, 180);
+    }
+
+    function finishLoading(){
+      clearInterval(loadingInterval);
+      loadingBar.style.width = '100%';
+      setTimeout(() => loadingBar.style.width = '0%', 220);
+    }
+
+    function createNewTab(url = null, makeActive = true, titleOverride = null){
+      counter++;
+      const id = 'tab-' + counter;
+      const isHomepage = (url === null);
+      const tabUrl = isHomepage ? 'about:home' : formatUrl(url);
+      const titleText = titleOverride || (isHomepage ? 'New Tab' : getHostName(tabUrl));
+
+      const btn = document.createElement('div');
+      btn.className = 'tab-button';
+      btn.draggable = true;
+      btn.dataset.tabId = id;
+
+      const fav = document.createElement('div');
+      fav.className = 'tab-favicon';
+      fav.style.backgroundImage = isHomepage
+        ? `url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22><rect width=%2220%22 height=%2220%22 rx=%224%22 fill=%22%236366f1%22/></svg>')`
+        : `url(${favFor(tabUrl)})`;
+
+      const tit = document.createElement('div');
+      tit.className = 'tab-title';
+      tit.textContent = titleText;
+
+      const close = document.createElement('div');
+      close.className = 'close-tab';
+      close.innerHTML = '&times;';
+
+      btn.appendChild(fav);
+      btn.appendChild(tit);
+      btn.appendChild(close);
+      tabsContainer.insertBefore(btn, addTabBtn);
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'iframe-tab-content';
+      wrapper.id = id + '-content';
+
+      if (isHomepage) {
+        wrapper.innerHTML = `
+          <div class="homepage-content" role="main">
+            <h1>CAS Cloak</h1>
+            <p>A cleaner browser shell with tabs, themes, and quick access links.</p>
+
+            <div class="search-container">
+              <input class="homepage-search-input" placeholder="Search or type URL" aria-label="Homepage search">
+              <button class="search-action" id="ai-btn-${id}">AI</button>
+            </div>
+
+            <div class="homepage-links">
+              <div class="home-link" data-url="https://www.youtube.com"><img src="https://www.google.com/s2/favicons?domain=youtube.com" alt="">YouTube</div>
+              <div class="home-link" data-url="https://www.roblox.com"><img src="https://www.google.com/s2/favicons?domain=roblox.com" alt="">Roblox</div>
+              <div class="home-link" data-url="https://www.tiktok.com"><img src="https://www.google.com/s2/favicons?domain=tiktok.com" alt="">TikTok</div>
+              <div class="home-link" data-url="https://www.google.com"><img src="https://www.google.com/s2/favicons?domain=google.com" alt="">Google</div>
+            </div>
+          </div>
+        `;
+      } else {
+        wrapper.innerHTML = `<iframe src="${tabUrl}" title="Embedded Website ${id}" allow="fullscreen"></iframe>`;
+      }
+
+      iframesContainer.appendChild(wrapper);
+
+      const tabObj = {
+        id,
+        url: tabUrl,
+        isHomepage,
+        title: titleText,
+        elements: { button: btn, favicon: fav, titleEl: tit, closeEl: close, contentEl: wrapper }
+      };
+      tabs.push(tabObj);
+
+      btn.addEventListener('click', () => switchTab(id));
+      close.addEventListener('click', (e) => { e.stopPropagation(); closeTab(id); });
+
+      btn.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', id); btn.classList.add('dragging'); });
+      btn.addEventListener('dragend', () => btn.classList.remove('dragging'));
+      btn.addEventListener('dragover', (e) => e.preventDefault());
+      btn.addEventListener('drop', (e) => {
+        e.preventDefault();
+        reorderTabs(e.dataTransfer.getData('text/plain'), id);
+      });
+
+      if (isHomepage){
+        const hInput = wrapper.querySelector('.homepage-search-input');
+        const aiBtn = wrapper.querySelector(`#ai-btn-${id}`);
+
+        hInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            const val = e.target.value.trim();
+            if (val) loadUrlInTab(id, val);
+          }
+        });
+
+        wrapper.querySelectorAll('.home-link').forEach(el =>
+          el.addEventListener('click', () => loadUrlInTab(id, el.dataset.url))
+        );
+
+        if (aiBtn){
+          aiBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const aiUrl = "https://ciphanonstudios.github.io/.11/aipage.html";
+            wrapper.innerHTML = `<iframe src="${aiUrl}" title="AI Page" allow="fullscreen"></iframe>`;
+          });
+        }
+      } else {
+        const iframe = wrapper.querySelector('iframe');
+        startLoading();
+        iframe.addEventListener('load', () => {
+          try {
+            const docTitle = iframe.contentDocument && iframe.contentDocument.title;
+            if (docTitle) {
+              tabObj.title = docTitle;
+              tabObj.elements.titleEl.textContent = docTitle;
+            }
+          } catch(e){}
+          tabObj.elements.favicon.style.backgroundImage = `url(${favFor(tabObj.url)})`;
+          finishLoading();
+        });
+      }
+
+      if (makeActive) switchTab(id);
+      saveState();
+      return tabObj;
+    }
+
+    function switchTab(id){
+      tabs.forEach(t => {
+        t.elements.contentEl.classList.toggle('active', t.id === id);
+        t.elements.button.classList.toggle('active', t.id === id);
+      });
+      const selected = tabs.find(t => t.id === id);
+      urlInput.value = selected ? (selected.isHomepage ? '' : selected.url) : '';
+      updateFullscreenControlsIfNeeded();
+      saveState();
+    }
+
+    function closeTab(id){
+      const idx = tabs.findIndex(t => t.id === id);
+      if (idx === -1) return;
+      const wasActive = tabs[idx].elements.button.classList.contains('active');
+      tabs[idx].elements.button.remove();
+      tabs[idx].elements.contentEl.remove();
+      tabs.splice(idx, 1);
+
+      if (tabs.length === 0) createNewTab(null);
+      else if (wasActive) switchTab(tabs[Math.max(0, idx - 1)].id);
+
+      saveState();
+    }
+
+    function reorderTabs(fromId, toId){
+      if (fromId === toId) return;
+      const fromIdx = tabs.findIndex(t => t.id === fromId);
+      const toIdx = tabs.findIndex(t => t.id === toId);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      const [item] = tabs.splice(fromIdx, 1);
+      tabs.splice(toIdx, 0, item);
+      tabs.forEach(t => tabsContainer.insertBefore(t.elements.button, addTabBtn));
+      saveState();
+    }
+
+    function loadUrlInTab(id, url){
+      const tab = tabs.find(t => t.id === id);
+      if (!tab) return;
+
+      const formatted = url === null ? 'about:home' : formatUrl(url);
+      tab.url = formatted;
+      tab.isHomepage = (formatted === 'about:home');
+      tab.title = tab.isHomepage ? 'New Tab' : getHostName(formatted);
+      tab.elements.titleEl.textContent = tab.title;
+
+      const wrapper = tab.elements.contentEl;
+
+      if (tab.isHomepage) {
+        wrapper.innerHTML = `
+          <div class="homepage-content" role="main">
+            <h1>CAS Cloak</h1>
+            <p>A cleaner browser shell with tabs, themes, and quick access links.</p>
+
+            <div class="search-container">
+              <input class="homepage-search-input" placeholder="Search or type URL" aria-label="Homepage search">
+              <button class="search-action">AI</button>
+            </div>
+
+            <div class="homepage-links">
+              <div class="home-link" data-url="https://blockersgotbugsfr.github.io/GreenFieldInfinite/"><img src="https://www.google.com/s2/favicons?domain=blockersgotbugsfr.github.io" alt="">Green Field Infinite</div>
+              <div class="home-link" data-url="https://www.roblox.com"><img src="https://www.google.com/s2/favicons?domain=roblox.com" alt="">Roblox</div>
+              <div class="home-link" data-url="https://www.tiktok.com"><img src="https://www.google.com/s2/favicons?domain=tiktok.com" alt="">TikTok</div>
+              <div class="home-link" data-url="https://www.google.com"><img src="https://www.google.com/s2/favicons?domain=google.com" alt="">Google</div>
+            </div>
+          </div>
+        `;
+
+        const hInput = wrapper.querySelector('.homepage-search-input');
+        hInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            const val = e.target.value.trim();
+            if (val) loadUrlInTab(id, val);
+          }
+        });
+        wrapper.querySelectorAll('.home-link').forEach(el =>
+          el.addEventListener('click', () => loadUrlInTab(id, el.dataset.url))
+        );
+      } else {
+        wrapper.innerHTML = `<iframe src="${formatted}" title="Embedded Website ${id}" allow="fullscreen"></iframe>`;
+        const iframe = wrapper.querySelector('iframe');
+        startLoading();
+        iframe.addEventListener('load', () => {
+          try {
+            const docTitle = iframe.contentDocument && iframe.contentDocument.title;
+            if (docTitle) {
+              tab.title = docTitle;
+              tab.elements.titleEl.textContent = docTitle;
+            }
+          } catch(e){}
+          tab.elements.favicon.style.backgroundImage = `url(${favFor(formatted)})`;
+          finishLoading();
+        });
+      }
+
+      switchTab(id);
+      saveState();
+    }
+
+    function loadInActive(url){
+      const active = tabs.find(t => t.elements.contentEl.classList.contains('active'));
+      if (active) loadUrlInTab(active.id, url);
+      else createNewTab(url);
+    }
+
+    function navigateHistory(delta){
+      const active = tabs.find(t => t.elements.contentEl.classList.contains('active'));
+      if (!active || active.isHomepage) return;
+      const iframe = active.elements.contentEl.querySelector('iframe');
+      try { iframe.contentWindow.history.go(delta); } catch(e) {}
+    }
+
+    backBtn.addEventListener('click', () => navigateHistory(-1));
+    forwardBtn.addEventListener('click', () => navigateHistory(1));
+    reloadBtn.addEventListener('click', () => {
+      const active = tabs.find(t => t.elements.contentEl.classList.contains('active'));
+      if (!active || active.isHomepage) return;
+      const iframe = active.elements.contentEl.querySelector('iframe');
+      startLoading();
+      try { iframe.contentWindow.location.reload(); } catch(e) { iframe.src = active.url; }
+    });
+
+    homeBtn.addEventListener('click', () => {
+      const active = tabs.find(t => t.elements.contentEl.classList.contains('active'));
+      if (active) loadUrlInTab(active.id, null);
+    });
+
+    addTabBtn.addEventListener('click', () => createNewTab(null));
+    goBtn.addEventListener('click', () => {
+      const val = urlInput.value.trim();
+      if (val) loadInActive(val);
+    });
+    urlInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') goBtn.click();
+    });
+
+    function saveState(){
+      try {
+        const data = {
+          counter,
+          tabs: tabs.map(t => ({ id: t.id, url: t.url, isHomepage: t.isHomepage, title: t.title })),
+          activeId: (tabs.find(t => t.elements.contentEl.classList.contains('active')) || {}).id,
+          theme: themeSelect.value
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch(e){}
+    }
+
+    function restoreState(){
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return createNewTab(null);
+
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.tabs) || data.tabs.length === 0) return createNewTab(null);
+
+        counter = data.counter || counter;
+        data.tabs.forEach(t => createNewTab(t.isHomepage ? null : t.url, false, t.title));
+        if (data.activeId) switchTab(data.activeId);
+        else switchTab(tabs[0].id);
+
+        if (data.theme) {
+          themeSelect.value = data.theme;
+          applyTheme(data.theme);
+        }
+      } catch(e){
+        createNewTab(null);
+      }
+    }
+
+    function applyTheme(name){
+      shell.classList.remove('theme-dark', 'theme-blue');
+      if (name === 'dark') shell.classList.add('theme-dark');
+      if (name === 'blue') shell.classList.add('theme-blue');
+      try { localStorage.setItem('otb_theme', name); } catch(e){}
+    }
+
+    themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
+
+    (function restoreThemeOnLoad(){
+      try {
+        const t = localStorage.getItem('otb_theme') || 'orange';
+        themeSelect.value = t;
+        applyTheme(t);
+      } catch(e){}
+    })();
+
+    document.addEventListener('keydown', (e) => {
+      const mod = e.ctrlKey || e.metaKey;
+      if (mod && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        createNewTab(null);
+      }
+      if (mod && e.key.toLowerCase() === 'w') {
+        e.preventDefault();
+        const active = tabs.find(t => t.elements.contentEl.classList.contains('active'));
+        if (active) closeTab(active.id);
+      }
+    });
+
+    function updateFullscreenControls(){
+      fullscreenControlsBar.innerHTML = '';
+      tabs.forEach(tab => {
+        const b = document.createElement('button');
+        b.className = 'fullscreen-tab-button';
+        b.textContent = tab.title;
+        if (tab.elements.contentEl.classList.contains('active')) b.classList.add('active');
+        b.addEventListener('click', () => switchTab(tab.id));
+        fullscreenControlsBar.appendChild(b);
+      });
+
+      const newBtn = document.createElement('button');
+      newBtn.className = 'fullscreen-tab-button';
+      newBtn.textContent = '+';
+      newBtn.addEventListener('click', () => createNewTab(null));
+      fullscreenControlsBar.appendChild(newBtn);
+    }
+
+    function updateFullscreenControlsIfNeeded(){
+      if (document.fullscreenElement) updateFullscreenControls();
+    }
+
+    function handleFullscreenChange(){
+      if (document.fullscreenElement) {
+        fullscreenControlsBar.style.display = 'block';
+        updateFullscreenControls();
+      } else {
+        fullscreenControlsBar.style.display = 'none';
+        fullscreenControlsBar.innerHTML = '';
+      }
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+    restoreState();
+    setInterval(saveState, 2500);
+
+    window.OrangeBrowser = { createNewTab, tabs };
+  })();
+  </script>
+</body>
+</html>
